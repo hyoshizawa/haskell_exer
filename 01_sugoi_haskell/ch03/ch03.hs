@@ -35,3 +35,54 @@ tell (x:y:[]) = "The list has two elements: " ++ show x ++ " and " ++ show y
 tell (x:y:_) = "This list is long. The first two elements are: " ++ show x
                ++ " and " ++ show y
 
+-- as pattern
+firstLetter :: String -> String
+firstLetter "" = "Empty string, whoops!"
+firstLetter all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
+
+-- guard
+bmiTell :: Double -> String
+bmiTell bmi
+    | bmi <= 18.5 = "You're underweight, you emo, you!"
+    | bmi <= 25.0 = "You're supposedly normal. Pffft, I bet you're ugly!"
+    | bmi <= 30.0 = "You're fat! Lose some weight, fatty!"
+    | otherwise   = "You're a whale, congratulations!"
+
+max' :: (Ord a) => a -> a -> a
+max' a b
+    | a <= b    = b
+    | otherwise = a
+
+myCompare :: (Ord a) => a -> a -> Ordering
+a `myCompare` b
+    | a == b    = EQ
+    | a <= b    = LT
+    | otherwise = GT
+
+-- where
+bmiTell' :: Double -> Double -> String
+bmiTell' weight height
+    | weight <= skinny = "You're underweight, you emo, you!"
+    | weight <= normal = "You're supposedly normal. Pffft, I bet you're ugly!"
+    | weight <= fat = "You're fat! Lose some weight, fatty!"
+    | otherwise      = "You're a whale, congratulations!"
+    where bmi = weight / height ^ 2
+          skinny = 18.5
+          normal = 25.0
+          fat = 30.0
+
+-- let
+cylinder :: Double -> Double -> Double
+cylinder r h =
+    let sideArea = 2 * pi * r * h
+        topArea = pi * r ^ 2
+    in  sideArea + 2 * topArea
+
+calcBmis :: [(Double, Double)] -> [Double]
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi > 25.0]
+
+-- case
+describeList :: [a] -> String
+describeList ls = "The list is " ++ case ls of [] -> "empty." 
+                                               [x] -> "a singleton list."
+                                               xs -> "a longer list."
